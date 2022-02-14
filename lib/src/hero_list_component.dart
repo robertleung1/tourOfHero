@@ -1,9 +1,9 @@
 import 'package:angular/angular.dart';
-import 'package:angular_forms/angular_forms.dart';
+import 'package:angular_router/angular_router.dart';
 import 'hero.dart';
 import 'mock_heroes.dart';
-import 'hero_component.dart';
 import 'hero_service.dart';
+import 'route_paths.dart';
 
 // AngularDart info: https://angulardart.xyz
 // Components info: https://angulardart.xyz/components
@@ -15,16 +15,18 @@ import 'hero_service.dart';
   selector: 'my-heros',
   styleUrls: ['hero_list_component.css'],
   templateUrl: 'hero_list_component.html',
-  directives: [coreDirectives, HeroComponent],
+  directives: [coreDirectives],
   providers: [ClassProvider(HeroService)],
+  pipes: [commonPipes],
 )
 class HeroListComponent implements OnInit {
   final title = 'Tour of Heroes';
   final HeroService _heroService;
+  final Router _router;
   List<Hero> heroes;
   Hero selected;
 
-  HeroListComponent(this._heroService);
+  HeroListComponent(this._heroService, this._router);
 
   void onSelect(Hero hero) => selected = hero;
 
@@ -33,4 +35,10 @@ class HeroListComponent implements OnInit {
   }
 
   void ngOnInit() => _getHeroes();
+
+  String _heroUrl(int id) =>
+      RoutePaths.hero.toUrl(parameters: {idParam: '$id'});
+
+  Future<NavigationResult> gotoDetail() =>
+      _router.navigate(_heroUrl(selected.id));
 }
