@@ -37,7 +37,7 @@ void main() {
 
   tearDown(disposeAnyRunningTest);
 
-  test('title', () {
+  test("Title is 'Tour of Heroes'", () {
     expect(appPO.title, 'Tour of Heroes');
   });
 }

@@ -20,7 +20,6 @@ abstract class AppPO {
   Iterable<Map> get heroes =>
       _heroes.map((el) => _heroDataFromLi(el.visibleText));
 
-  // ···
   Map<String, dynamic> _heroDataFromLi(String liText) {
     final matches = RegExp((r'^(\d+) (.*)$')).firstMatch(liText);
     return _heroData(matches[1], matches[2]);
