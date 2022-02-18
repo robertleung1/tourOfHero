@@ -4,6 +4,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:mockito/mockito.dart';
 
+// The InjectorProbe will allow individual tests to access the test context injector.
 class InjectorProbe {
   InjectorFactory _parent;
   Injector _injector;
@@ -24,6 +25,7 @@ class MockPlatformLocation extends Mock implements PlatformLocation {
   String get pathname => _url ?? '';
   String get search => '';
 
+  // Push location info to location history stack
   void pushState(state, String title, String url) => _url = url;
 }
 

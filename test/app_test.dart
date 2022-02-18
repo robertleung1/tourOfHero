@@ -25,6 +25,7 @@ void main() {
   AppPO appPO;
   Router router;
 
+  // setup test environment using a real router, and navigate to the root page
   setUp(() async {
     fixture = await testBed.create();
     router = injector.get<Router>(Router);
