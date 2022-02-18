@@ -1,22 +1,44 @@
 @TestOn('browser')
+import 'package:angular/angular.dart';
 import 'package:angular_test/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:tourOfHero/src/hero_list_component.dart';
+import 'package:angular_router/angular_router.dart';
+import 'package:tourOfHero/app_component.dart';
 import 'package:tourOfHero/app_component.template.dart' as ng;
+import 'package:ngpageloader/html.dart';
+import 'package:test/test.dart';
+
+import 'app_test.template.dart' as self;
+import 'app_po.dart';
+import 'utils.dart';
 
 // Testing info: https://angulardart.xyz/guide/testing
 
-void main() {
-  final testBed = NgTestBed<AppComponent>(ng.AppComponentNgFactory);
-  NgTestFixture<AppComponent> fixture;
+@GenerateInjector(routerProvidersForTesting)
+final InjectorFactory rootInjector = self.rootInjector$Injector;
 
+void main() {
+  final injector = InjectorProbe(rootInjector);
+  final testBed = NgTestBed<AppComponent>(ng.AppComponentNgFactory,
+      rootInjector: injector.factory);
+
+  NgTestFixture<AppComponent> fixture;
+  AppPO appPO;
+  Router router;
+
+  // setup test environment using a real router, and navigate to the root page
   setUp(() async {
     fixture = await testBed.create();
+    router = injector.get<Router>(Router);
+    await router.navigate('/');
+    await fixture.update();
+    final context =
+        HtmlPageLoaderElement.createFromElement(fixture.rootElement);
+    appPO = AppPO.create(context);
   });
 
   tearDown(disposeAnyRunningTest);
 
-  test('heading', () {
-    expect(fixture.text, contains('My First AngularDart App'));
+  test("Title is 'Tour of Heroes'", () {
+    expect(appPO.title, 'Tour of Heroes');
   });
 }
